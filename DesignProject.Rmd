@@ -1,0 +1,86 @@
+---
+title: "DesignProject"
+author: "Michelle Nesbit"
+date: "2022-11-16"
+output: html_document
+---
+2^4 factorial experimental design
+beyblades
+A) stadium (a surface it spins on)
+B) launcher (ripcord tool that starts it spinning)
+C) beyblade (spinning top toy)
+D) beyblader (aka operator) age bracket (so 30 and under vs. 31+)
+
+randomize draws
+enter data
+check dfs
+visually look for significant factors
+reduce model
+run anova
+check model assumptions
+post hoc?
+additional research that could be done?
+
+We need to randomize runs within the blocks
+
+```{r}
+A <- as.factor(rep(c(-1,1), times=8))
+B <- as.factor(rep(c(-1,1), each = 2, times=4))
+C <- as.factor(rep(c(-1,1), each = 4, times=2))
+D <- as.factor(rep(c(-1,1), each = 8))
+blocks<-as.factor(rep(c(1,2), each=8))
+#ABCD-:(1), ab, ab, bc, ad, bd, cd, abcd  
+#ABCD+: a, b , c, abc, d, abd, acd, bcd
+Bl1 <- c('(1)', 'ab', 'ab', 'bc', 'ad', 'bd', 'cd', 'abcd')
+Bl2<- c('a', 'b' , 'c', 'abc', 'd', 'abd', 'acd', 'bcd')
+
+y <- c(Bl1, Bl2)
+
+beydata <- data.frame(A, B, C, D, y, blocks)
+
+beymod <- lm(y ~ ((A+B+C+D)^4+blocks), data=beydata)
+anova(beymod) 
+
+#Visualize effects looks like ____ could be significant
+beymod$effects
+beymod.effects <- abs(beymod$effects[-1])
+
+qq <- qqnorm(beymod.effects, type="n")  
+text(qq$x, qq$y, labels = names(beymod$effects))
+
+# Run Anova
+beymod2 <- lm(y ~ ((A+B+C+D)^4+blocks), data=beydata)
+anova(beymod2) 
+
+# We find ____ to be significant factors. Will remove others and rerun ANOVA.
+beymod3<-lm(y~A+B+C+D+A*B+A*C+A*B*C, data=beydata)
+anova(beymod3)
+
+#effect estimates
+beymod3$coefficients
+
+# assumption tests
+# residual analysis via normal plot: looks mostly normal, some head/tail
+par(mfrow=c(1,2))
+qqnorm(beymod3$residuals)
+qqline(beymod3$residuals)
+#testing assumptions
+# we fail to reject normality or homoscedasticity of any main factors
+shapiro.test(beymod3$residuals) 
+bartlett.test(beymod3$residuals~A)
+bartlett.test(beymod3$residuals~B)
+bartlett.test(beymod3$residuals~C)
+bartlett.test(beymod3$residuals~D)
+```
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
