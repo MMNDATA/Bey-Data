@@ -34,6 +34,14 @@ blocks<-as.factor(rep(c(1,2), each=8))
 Bl1 <- c('(1)', 'ab', 'ab', 'bc', 'ad', 'bd', 'cd', 'abcd')
 Bl2<- c('a', 'b' , 'c', 'abc', 'd', 'abd', 'acd', 'bcd')
 
+#randomly sample from each block
+set.seed(2022)
+block1_runs <- sample(Bl1,size=8,replace=F)
+#bc, ab, bd, cd, abcd, ab, (1), ad
+set.seed(2022)
+block2_runs <- sample(Bl2,size=8,replace=F)
+#abc, c, abd, acd, bcd, b, a, d
+
 y <- c(Bl1, Bl2)
 
 beydata <- data.frame(A, B, C, D, y, blocks)
