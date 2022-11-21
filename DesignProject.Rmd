@@ -9,7 +9,11 @@ beyblades
 A) stadium (a surface it spins on)
 B) launcher (ripcord tool that starts it spinning)
 C) beyblade (spinning top toy)
-D) beyblader (aka operator) age bracket (so 30 and under vs. 31+)
+D) spin direction (left or right)
+
+We are confounding ABCD interaction within blocks, so that L = x1+x2+x3+x4 (mod 2)
+will be 0 if {x1,x2,x3,x4} contains 0, 2, or 4 ones: (1), ab, ac, ad, bc, bd,
+cd, abcd, and 1 otherwise
 
 randomize draws
 enter data
@@ -31,13 +35,13 @@ D <- as.factor(rep(c(-1,1), each = 8))
 blocks<-as.factor(rep(c(1,2), each=8))
 #ABCD-:(1), ab, ab, bc, ad, bd, cd, abcd  
 #ABCD+: a, b , c, abc, d, abd, acd, bcd
-Bl1 <- c('(1)', 'ab', 'ab', 'bc', 'ad', 'bd', 'cd', 'abcd')
+Bl1 <- c('(1)', 'ab', 'ac', 'bc', 'ad', 'bd', 'cd', 'abcd')
 Bl2<- c('a', 'b' , 'c', 'abc', 'd', 'abd', 'acd', 'bcd')
 
 #randomly sample from each block
 set.seed(2022)
 block1_runs <- sample(Bl1,size=8,replace=F)
-#bc, ab, bd, cd, abcd, ab, (1), ad
+#bc, ac, bd, cd, abcd, ab, (1), ad
 set.seed(2022)
 block2_runs <- sample(Bl2,size=8,replace=F)
 #abc, c, abd, acd, bcd, b, a, d
