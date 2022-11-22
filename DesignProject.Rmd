@@ -46,6 +46,10 @@ set.seed(2022)
 block2_runs <- sample(Bl2,size=8,replace=F)
 #abc, c, abd, acd, bcd, b, a, d
 
+#input data
+bl1_spins <- c(62.98,75.72,23.98,83.58,108.11,24.00,24.77,4.31)
+bl2_spins <- c(83.80,98.16,31.34,69.39,81.41,24.04,69.87,54.51)
+
 y <- c(Bl1, Bl2)
 
 beydata <- data.frame(A, B, C, D, y, blocks)
@@ -85,11 +89,11 @@ bartlett.test(beymod3$residuals~C)
 bartlett.test(beymod3$residuals~D)
 ```
 ```
-
-
+Data
 ```{r}
 
 ```
+
 
 
 ```{r}
