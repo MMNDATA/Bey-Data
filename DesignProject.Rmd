@@ -6,10 +6,10 @@ output: html_document
 ---
 2^4 factorial experimental design
 beyblades
-A) stadium (a surface it spins on)
-B) launcher (ripcord tool that starts it spinning)
-C) beyblade (spinning top toy)
-D) spin direction (left or right)
+A) stadium (a surface it spins on) (grey is low, blue is high)
+B) launcher (ripcord tool that starts it spinning) (white is low, black is high)
+C) beyblade (spinning top toy) (dark red is low, light red is high)
+D) mode (mode 1 is low, mode 2 is high)
 
 We are confounding ABCD interaction within blocks, so that L = x1+x2+x3+x4 (mod 2)
 will be 0 if {x1,x2,x3,x4} contains 0, 2, or 4 ones: (1), ab, ac, ad, bc, bd,
