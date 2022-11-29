@@ -2,7 +2,9 @@
 title: "DesignProject"
 author: "Michelle Nesbit"
 date: "2022-11-16"
-output: html_document
+output:
+  word_document: default
+  html_document: default
 ---
 2^4 factorial experimental design
 beyblades
@@ -28,11 +30,6 @@ additional research that could be done?
 We need to randomize runs within the blocks
 
 ```{r}
-A <- as.factor(rep(c(-1,1), times=8))
-B <- as.factor(rep(c(-1,1), each = 2, times=4))
-C <- as.factor(rep(c(-1,1), each = 4, times=2))
-D <- as.factor(rep(c(-1,1), each = 8))
-blocks<-as.factor(rep(c(1,2), each=8))
 #ABCD-:(1), ab, ab, bc, ad, bd, cd, abcd  
 #ABCD+: a, b , c, abc, d, abd, acd, bcd
 Bl1 <- c('(1)', 'ab', 'ac', 'bc', 'ad', 'bd', 'cd', 'abcd')
@@ -46,31 +43,58 @@ set.seed(2022)
 block2_runs <- sample(Bl2,size=8,replace=F)
 #abc, c, abd, acd, bcd, b, a, d
 
+#set up experiment
+A <- rep(c(-1,1), times=8)
+B <- rep(c(-1,1), each = 2, times=4)
+C <- rep(c(-1,1), each = 4, times=2)
+D <- rep(c(-1,1), each = 8)
+
 #input data
-bl1_spins <- c(62.98,75.72,23.98,83.58,108.11,24.00,24.77,4.31)
-bl2_spins <- c(83.80,98.16,31.34,69.39,81.41,24.04,69.87,54.51)
+y <- c(24.77, 69.87, 24.04, 98.16, 54.51, 24, 75.72, 4.31, 62.98, 23.98, 83.58, 
+       83.8, 31.34, 69.39, 81.41, 108.11)
 
-y <- c(Bl1, Bl2)
+ABCD <- A*B*C*D #we want to confound
 
-beydata <- data.frame(A, B, C, D, y, blocks)
+A <- as.factor(A)
+B <- as.factor(B)
+C <- as.factor(C)
+D <- as.factor(D)
 
-beymod <- lm(y ~ ((A+B+C+D)^4+blocks), data=beydata)
-anova(beymod) 
+beydata <- data.frame(A, B, C, D, ABCD, y)
 
-#Visualize effects looks like ____ could be significant
+beymod <- lm(y ~ ((A+B+C+D)^4), data=beydata)
+anova(beymod) #not enough df's to do anova so we will visualize and see what effects are significant!
+
+#Visualize effects 
 beymod$effects
 beymod.effects <- abs(beymod$effects[-1])
 
 qq <- qqnorm(beymod.effects, type="n")  
 text(qq$x, qq$y, labels = names(beymod$effects))
 
-# Run Anova
-beymod2 <- lm(y ~ ((A+B+C+D)^4+blocks), data=beydata)
+# create reduced model by dropping highest order interaction
+beymod2 <- lm(y ~ A + B + C + D + B*C + C*D + A*B+ B*D, data=beydata)
 anova(beymod2) 
 
-# We find ____ to be significant factors. Will remove others and rerun ANOVA.
-beymod3<-lm(y~A+B+C+D+A*B+A*C+A*B*C, data=beydata)
-anova(beymod3)
+# We find nothing to be significant factors. Will remove A:B and B:C because they are very insignificant and rerun ANOVA.
+beymod3<-lm(y ~ A + B + C + D + C*D + B*D, data=beydata)
+anova(beymod3) #nothing is significant
+
+#remove A because p value 0.73 and not in any interaction terms
+beymod4<-lm(y ~ B + C + D + C*D + B*D, data=beydata)
+anova(beymod4) #nothing is significant
+
+#remove interaction terms because nothing is significant
+beymod5<-lm(y ~ B + C + D, data=beydata)
+anova(beymod5) #nothing is significant
+
+#remove c because it is not significant
+beymod6<-lm(y ~ B + D, data=beydata)
+anova(beymod6) #nothing is significant
+
+#remove D because it is not significant
+beymod7<-lm(y ~ D, data=beydata)
+anova(beymod7) #nothing is significant!!!! at all!!!!
 
 #effect estimates
 beymod3$coefficients
@@ -79,20 +103,20 @@ beymod3$coefficients
 # residual analysis via normal plot: looks mostly normal, some head/tail
 par(mfrow=c(1,2))
 qqnorm(beymod3$residuals)
-qqline(beymod3$residuals)
+qqline(beymod3$residuals) #this looks pretty normal!! great
 #testing assumptions
 # we fail to reject normality or homoscedasticity of any main factors
-shapiro.test(beymod3$residuals) 
-bartlett.test(beymod3$residuals~A)
-bartlett.test(beymod3$residuals~B)
-bartlett.test(beymod3$residuals~C)
-bartlett.test(beymod3$residuals~D)
+shapiro.test(beymod3$residuals) #hip hip hooray it is normal!
+bartlett.test(beymod3$residuals~A) #homoscedastic
+bartlett.test(beymod3$residuals~B) #homoscedastic
+bartlett.test(beymod3$residuals~C) #homoscedastic
+bartlett.test(beymod3$residuals~D) #homoscedastic
 ```
-```
-Data
+
 ```{r}
 
 ```
+
 
 
 
