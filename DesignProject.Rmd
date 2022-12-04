@@ -121,6 +121,16 @@ new_y <- ifelse(y > 60, 1, 0)
 log_reg <- glm(factor(new_y) ~ factor(A) + factor(B) + factor(C) + factor(D), family="binomial")
 summary(log_reg)
 
+exp(-1.72 + 0.75 + 2.10 - 0.75 + 2.10)/(1+ exp(-1.72 + 0.75 + 2.10 - 0.75 + 2.10))
+exp(-1.72)/(1 + exp(-1.72))
+
+Rachel <- c(1,-1,-1, 1)
+Michelle <- c(1, 1, 1, -1)
+simulated_game <- data.frame(t(data.frame(Rachel,Michelle)))
+colnames(simulated_game) <- c("A","B","C","D")
+predictions <- predict(log_reg,simulated_game,type = "response")
+results <- ifelse(predictions > 0.5, 1, 0)
+
 ```
 
 
