@@ -131,6 +131,11 @@ colnames(simulated_game) <- c("A","B","C","D")
 predictions <- predict(log_reg,simulated_game,type = "response")
 results <- ifelse(predictions > 0.5, 1, 0)
 
+require(pROC)
+rocplot <- roc(new_y~fitted(log_reg),data=beydata)
+plot.roc(rocplot,legacy.axes = T)
+auc(rocplot)
+
 ```
 
 
