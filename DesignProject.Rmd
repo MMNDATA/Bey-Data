@@ -74,10 +74,10 @@ text(qq$x, qq$y, labels = names(beymod$effects))
 
 # create reduced model by dropping highest order interaction
 Blocks <- ABCD
-beymod2 <- lm(y ~ A + B + C + D + B*C + C*D + A*B+ B*D + Blocks, data=beydata)
+beymod2 <- lm(y ~ A + B + C + D + B*C + C*D + A*B+ B*D + A*B*D + Blocks, data=beydata)
 anova(beymod2) 
 
-# We find nothing to be significant factors. Will remove A:B and B:C because they are very insignificant and rerun ANOVA.
+# We find nothing to be significant factors. Will remove A:B, B:C, A*B*D because they are very insignificant and rerun ANOVA.
 beymod3<-lm(y ~ A + B + C + D + C*D + B*D + Blocks, data=beydata)
 anova(beymod3) #nothing is significant
 
