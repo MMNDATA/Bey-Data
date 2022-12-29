@@ -1,1 +1,2 @@
 # Bey-Data
+We designed a 2^4 factorial experiment with two incomplete blocks to determine the effect of Beyblades and their accessories on the toy top's spin length. Additional analysis included a logistic regression model where 1 was equal to a Beyblade battle win and zero was a lose. These binary responses were classed as 1 for spins longer than 60 seconds and 0 otherwise. An ROC curve was created, which had an area under the curve of 0.82, indicating that this model has good predictive power.
